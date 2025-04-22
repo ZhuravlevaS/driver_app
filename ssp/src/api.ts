@@ -1,7 +1,7 @@
 import {ApiResponseType, ErrorResponseType} from "./types/apiTypes.ts";
 
 
-const BASE_URL: string = import.meta.env.VITE_BASE_URL;
+const BASE_URL: string = "http://localhost:3001";
 
 const rawRequest = async (
   url: string,
@@ -30,14 +30,15 @@ const makeRequest = async <R>(
   }
 
   const response: Response = await rawRequest(url, config);
+  const responseJson = await response.json();
   const data: ApiResponseType<R> = {
-    isError: response.status !== 200,
-    data: await response.json()
+    isError: !response.ok,
+    data: responseJson
   }
 
   if (data.isError) {
-    const data = await response.json() as ErrorResponseType;
-    console.error(data.message);
+    const error = responseJson as ErrorResponseType;
+    console.error(error.message);
   }
 
   return data;

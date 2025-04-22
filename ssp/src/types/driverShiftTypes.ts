@@ -1,4 +1,4 @@
-export type DriverShift = {
+export type DriverShiftTypes = {
   driverId: string;
   licensePlate: string;
   shiftId: string;
