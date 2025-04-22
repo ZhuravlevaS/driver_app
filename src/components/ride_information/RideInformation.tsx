@@ -1,4 +1,4 @@
-import {Box, Fade, Grid} from "@mui/material";
+import {Fade, Grid} from "@mui/material";
 import {RideRoute} from "./RideRoute.tsx";
 import {RideDetails} from "./RideDetails.tsx";
 import {PassengerCheckinResponseType, PassengerType, RideType} from "../../types/rideTypes.ts";
@@ -13,18 +13,22 @@ type Props = {
 
 const areAllPassengersCheckedIn = (passengers: PassengerType[]) => {
   if (!passengers || passengers.length === 0) return false;
-  return passengers.every(passenger => passenger.status === 'checked-in' || passenger.status === 'rejected');
+
+  return passengers.some((passenger: PassengerType) => passenger.status === 'checked-in') &&
+    passengers.every((passenger: PassengerType) => passenger.status !== 'pending');
 };
 
 export function RideInformation({ride}: Props) {
   const [areAllChecked, setAreAllChecked] = useState<boolean>(false);
+  const [passengers, setPassengers] = useState<PassengerType[] | null>(null);
 
-  const handleCheckInPassenger = (passengerId: string, action: string) => {
+  const handleCheckInPassenger = async (passengerId: string, action: string) => {
     return Api.post('/check-in-passenger', {
       passengerId, action
     }).then((response) => {
       if (!response.isError) {
         const res = response.data as PassengerCheckinResponseType;
+        setPassengers(res.passengers)
         setAreAllChecked(areAllPassengersCheckedIn(res.passengers));
       }
 
@@ -40,19 +44,17 @@ export function RideInformation({ride}: Props) {
 
   return (
     <Fade in={true} timeout={500}>
-      <Box>
         <Grid container spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>
 
           <RideRoute dropoffLocation={ride.dropoffLocation} pickupLocation={ride.pickupLocation} />
 
-          <PassengerList passengers={ride.passengers} onCheckInAction={handleCheckInPassenger} />
+          <PassengerList passengers={passengers || ride.passengers} onCheckInAction={handleCheckInPassenger} />
 
           <RideDetails rideId={ride.rideId} rideEndTime={ride.rideEndTime} rideStartTime={ride.rideStartTime} />
 
           <ActionButtons isBtnDisabled={!areAllChecked}/>
 
         </Grid>
-      </Box>
     </Fade>
   );
 }

@@ -12,7 +12,6 @@ import {
 import {
   Check as CheckIcon,
   Close as CloseIcon,
-  Done as DoneIcon,
   Block as RejectIcon
 } from '@mui/icons-material';
 import {ActionType, PassengerType} from "../../types/rideTypes.ts";
@@ -26,7 +25,6 @@ type Props = {
 const PassengerItem = ({passenger, onCheckInAction}: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [successAction, setSuccessAction] = useState<ActionType | null>(null);
 
   const handleAction = async (action: ActionType) => {
     if (passenger.status !== 'pending' || loading) return;
@@ -34,41 +32,18 @@ const PassengerItem = ({passenger, onCheckInAction}: Props) => {
     setLoading(true);
     setError(null);
 
-    try {
-      const result = await onCheckInAction(passenger.id, action);
-      if (result) {
-        setSuccessAction(action);
-      } else {
+    await onCheckInAction(passenger.id, action).then((result)=> {
+      if (result.isError) {
         setError(`Failed to ${action === 'check-in' ? 'check in' : 'reject'} passenger`);
       }
-    } catch (err) {
+    }).catch((err: Error) => {
       setError('An error occurred');
       console.error('Action error:', err);
-    } finally {
-      setLoading(false);
-    }
+    }).finally(()=> setLoading(false));
+
   };
 
   const getStatusContent = () => {
-    if (successAction === 'check-in') {
-      return {
-        label: 'Checked In',
-        icon: <DoneIcon />,
-        color: 'success' as const,
-        buttonVariant: 'contained' as const
-      };
-    }
-
-    if (successAction === 'reject') {
-      return {
-        label: 'Rejected',
-        icon: <CloseIcon />,
-        color: 'error' as const,
-        buttonVariant: 'contained' as const
-      };
-    }
-
-    // If the status is already set in the data
     if (passenger.status === 'checked-in') {
       return {
         label: 'Checked In',
@@ -90,7 +65,6 @@ const PassengerItem = ({passenger, onCheckInAction}: Props) => {
   };
 
   const statusContent = getStatusContent();
-  const isPending = passenger.status === 'pending' && !successAction;
 
   return (
     <ListItem
@@ -127,7 +101,7 @@ const PassengerItem = ({passenger, onCheckInAction}: Props) => {
               Processing...
             </Typography>
           </Box>
-        ) : isPending ? (
+        ) : passenger.status === 'pending' ? (
           <ButtonGroup size="small" variant="outlined">
             <Tooltip title="Check in this passenger">
               <Button

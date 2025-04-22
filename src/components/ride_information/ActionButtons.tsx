@@ -1,4 +1,4 @@
-import {Box, Button, Dialog, DialogContent, Grid, Typography} from "@mui/material";
+import {Button, Dialog, DialogContent, Grid, Typography} from "@mui/material";
 import {useState} from "react";
 
 type Props = {
@@ -17,8 +17,7 @@ export function ActionButtons({isBtnDisabled}: Props) {
   };
 
   return (
-    <Grid size={{xs: 4, sm: 8, md: 12}}>
-      <Box display="flex" justifyContent="center">
+    <Grid justifyContent="center" size={{xs: 4, sm: 8, md: 12}}>
         <Button
           variant="contained"
           color="primary"
@@ -43,7 +42,6 @@ export function ActionButtons({isBtnDisabled}: Props) {
             </Typography>
           </DialogContent>
         </Dialog>
-      </Box>
     </Grid>
   );
 }
