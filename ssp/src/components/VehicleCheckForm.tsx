@@ -19,11 +19,11 @@ import {
   Lightbulb as LightsIcon,
   DoNotDisturb as DoNotDisturbIcon,
 } from '@mui/icons-material';
-import {Api} from "../../api.ts";
+import {Api} from "../api.ts";
 import {useState} from 'react';
-import {ApiResponseType, ErrorResponseType} from "../../types/apiTypes.ts";
+import {ApiResponseType, ErrorResponseType} from "../types/apiTypes.ts";
 import {useNavigate} from "react-router";
-import {ErrorMessage} from "../ErrorMessage.tsx";
+import {ErrorMessage} from "./ErrorMessage.tsx";
 
 type VehicleCheckForm = {
   carOk: boolean;

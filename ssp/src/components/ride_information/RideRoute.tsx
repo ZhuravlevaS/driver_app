@@ -20,7 +20,7 @@ export function RideRoute({
           Ride Route
         </Typography>
         <Box display="flex" alignItems="center" mb={2} justifyContent="center">
-          <LocationIcon color="primary" sx={{mt: -0.5 , mr: 1.5}} />
+          <LocationIcon color="primary" sx={{mt: -0.5, mr: 1.5}} />
           <Box>
             <Typography variant="body2" color="text.secondary">
               Pickup Location

@@ -28,3 +28,5 @@ export type PassengerCheckinResponseType = {
   message: string;
   passengers: PassengerType[];
 }
+
+export type ActionType = 'check-in' | 'reject';

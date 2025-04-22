@@ -1,6 +1,7 @@
 import {Grid, Paper, Typography} from "@mui/material";
 import {formatTime} from "../../utills.ts";
 import {AccessTime as ClockIcon} from '@mui/icons-material';
+
 type Props = {
   rideId: string;
   rideStartTime: string;

@@ -1,10 +1,9 @@
 import {useEffect, useState} from 'react'
-import './App.css'
 import {Api} from "../api.ts";
-import {Loader} from "../components/loader/Loader.tsx";
+import {Loader} from "../components/Loader.tsx";
 import {ApiResponseType, ErrorResponseType} from "../types/apiTypes.ts";
 import {DriverShiftTypes} from "../types/driverShiftTypes.ts";
-import VehicleCheckForm from "../components/vehicle_check_form/VehicleCheckForm.tsx";
+import VehicleCheckForm from "../components/VehicleCheckForm.tsx";
 import {ErrorMessage} from "../components/ErrorMessage.tsx";
 
 const driverId = "123";

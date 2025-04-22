@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import {
   ListItem,
   ListItemText,
@@ -15,20 +15,20 @@ import {
   Done as DoneIcon,
   Block as RejectIcon
 } from '@mui/icons-material';
-import {PassengerType} from "../types/rideTypes.ts";
-import {ApiResponseType} from "../types/apiTypes.ts";
+import {ActionType, PassengerType} from "../../types/rideTypes.ts";
+import {ApiResponseType} from "../../types/apiTypes.ts";
 
 type Props = {
   passenger: PassengerType;
-  onCheckInAction: (passengerId: string, action: 'check-in' | 'reject') =>  Promise<ApiResponseType<unknown>>;
+  onCheckInAction: (passengerId: string, action: ActionType) => Promise<ApiResponseType<unknown>>;
 }
 
-const PassengerItem = ({ passenger, onCheckInAction }:Props) => {
+const PassengerItem = ({passenger, onCheckInAction}: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [successAction, setSuccessAction] = useState<'check-in' | 'reject' | null>(null);
+  const [successAction, setSuccessAction] = useState<ActionType | null>(null);
 
-  const handleAction = async (action: 'check-in' | 'reject') => {
+  const handleAction = async (action: ActionType) => {
     if (passenger.status !== 'pending' || loading) return;
 
     setLoading(true);
@@ -107,59 +107,59 @@ const PassengerItem = ({ passenger, onCheckInAction }:Props) => {
       }}
     >
       <Box>
-      <ListItemText
-        primary={
-          <Typography align='center' variant="body1" fontWeight={500}>
-            {passenger.name}
-          </Typography>
-        }
-        secondary={error && (
-          <Typography variant="caption" color="error">
-            {error}
-          </Typography>
-        )}
-      />
+        <ListItemText
+          primary={
+            <Typography align='center' variant="body1" fontWeight={500}>
+              {passenger.name}
+            </Typography>
+          }
+          secondary={error && (
+            <Typography variant="caption" color="error">
+              {error}
+            </Typography>
+          )}
+        />
 
-      {loading ? (
-        <Box display="flex" alignItems="center" ml={1}>
-          <CircularProgress size={20} sx={{ mr: 1 }} />
-          <Typography variant="body2" color="text.secondary">
-            Processing...
-          </Typography>
-        </Box>
-      ) : isPending ? (
-        <ButtonGroup size="small" variant="outlined">
-          <Tooltip title="Check in this passenger">
-            <Button
-              color="success"
-              onClick={() => handleAction('check-in')}
-              startIcon={<CheckIcon />}
-            >
-              Check in
-            </Button>
-          </Tooltip>
-          <Tooltip title="Reject this passenger">
-            <Button
-              color="error"
-              onClick={() => handleAction('reject')}
-              startIcon={<CloseIcon />}
-            >
-              Reject
-            </Button>
-          </Tooltip>
-        </ButtonGroup>
-      ) : (
-        <Button
-          size="small"
-          variant={statusContent?.buttonVariant}
-          color={statusContent?.color}
-          startIcon={statusContent?.icon}
-          disabled
-          sx={{ ml: 1 }}
-        >
-          {statusContent?.label}
-        </Button>
-      )} </Box>
+        {loading ? (
+          <Box display="flex" alignItems="center" ml={1}>
+            <CircularProgress size={20} sx={{mr: 1}} />
+            <Typography variant="body2" color="text.secondary">
+              Processing...
+            </Typography>
+          </Box>
+        ) : isPending ? (
+          <ButtonGroup size="small" variant="outlined">
+            <Tooltip title="Check in this passenger">
+              <Button
+                color="success"
+                onClick={() => handleAction('check-in')}
+                startIcon={<CheckIcon />}
+              >
+                Check in
+              </Button>
+            </Tooltip>
+            <Tooltip title="Reject this passenger">
+              <Button
+                color="error"
+                onClick={() => handleAction('reject')}
+                startIcon={<CloseIcon />}
+              >
+                Reject
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
+        ) : (
+          <Button
+            size="small"
+            variant={statusContent?.buttonVariant}
+            color={statusContent?.color}
+            startIcon={statusContent?.icon}
+            disabled
+            sx={{ml: 1}}
+          >
+            {statusContent?.label}
+          </Button>
+        )} </Box>
     </ListItem>
   );
 };
