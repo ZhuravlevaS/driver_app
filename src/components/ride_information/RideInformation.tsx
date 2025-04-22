@@ -14,8 +14,8 @@ type Props = {
 const areAllPassengersCheckedIn = (passengers: PassengerType[]) => {
   if (!passengers || passengers.length === 0) return false;
 
-  return passengers.some((passenger: PassengerType) => passenger.status === 'checked-in') &&
-    passengers.every((passenger: PassengerType) => passenger.status !== 'pending');
+  return passengers.every((passenger: PassengerType) => passenger.status !== 'pending') &&
+  passengers.some((passenger: PassengerType) => passenger.status === 'checked-in');
 };
 
 export function RideInformation({ride}: Props) {
